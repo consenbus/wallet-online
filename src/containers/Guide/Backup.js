@@ -60,7 +60,9 @@ class Backup extends Component {
         </div>
 
         <div style={{ marginTop: "1rem" }}>
-          <Link to="/">Do it later</Link>
+          <Link to="/" style={{ color: "white" }}>
+            Do it later
+          </Link>
         </div>
       </Layout>
     );

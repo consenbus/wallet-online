@@ -49,7 +49,9 @@ class Index extends Component {
         </div>
 
         <div style={{ marginTop: "1rem" }}>
-          <Link to="/">Restore from backup</Link>
+          <Link to="/" style={{ color: "white" }}>
+            Restore from backup
+          </Link>
         </div>
       </Layout>
     );

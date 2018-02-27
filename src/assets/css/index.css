@@ -29,3 +29,11 @@ body {
   top: 0;
   left: 0;
 }
+
+a {
+  color: #306ffd;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+}
