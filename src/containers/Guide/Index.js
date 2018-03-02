@@ -12,6 +12,7 @@ class Index extends Component {
     return (
       <Layout>
         <img
+          alt="logo"
           src={logo}
           style={{
             marginTop: "5rem",
