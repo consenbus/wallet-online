@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
 import { withStyles } from "material-ui/styles";
 import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/Menu/MenuItem";
@@ -6,47 +7,8 @@ import Card, { CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import Layout from "../_Layout";
 import Header from "./_Header";
-
-const styles = theme => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    //marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200
-  },
-  menu: {
-    width: 200
-  },
-  textFieldRoot: {
-    padding: 0,
-    "label + &": {
-      marginTop: theme.spacing.unit * 3
-    }
-  },
-  textFieldInput: {
-    // borderRadius: 4,
-    backgroundColor: theme.palette.common.white,
-    border: "1px solid #ced4da",
-    padding: "5px",
-    // fontSize: 16,
-    // padding: "10px 12px",
-    width: "calc(100% - 24px)",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    "&:focus": {
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
-    }
-  },
-  textFieldUnit: {
-    padding: "6px"
-  },
-  textFieldFormLabel: {
-    fontSize: 18
-  }
-});
+import styles from "../../../styles/form";
+import _isEmpty from "lodash/isEmpty";
 
 const units = [
   { label: "GBUS", value: "GBUS" },
@@ -60,15 +22,39 @@ const units = [
 
 class Send extends Component {
   state = {
-    address: "",
+    success: false,
+    account: "",
+    accountError: "",
     amount: "",
-    unit: "BUS"
+    amountError: "",
+    unit: "BUS",
+    unitErro: ""
   };
 
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value
+      [name]: event.target.value,
+      [name + "Error"]: ""
     });
+  };
+
+  handleSend = e => {
+    e.preventDefault();
+    if (this.state.account === "") {
+      this.setState({ accountError: "Recipient address must not be blank." });
+      return;
+    }
+
+    if (this.state.amount === "") {
+      this.setState({ amountError: "Amount must not be blank." });
+      return;
+    }
+
+    this.props.account
+      .sendAccountBlocks(this.state.account, this.state.amount)
+      .then(() => {
+        this.setState({ success: true });
+      });
   };
 
   render() {
@@ -92,16 +78,24 @@ class Send extends Component {
         <div style={{ padding: 20 }}>
           <Card>
             <CardContent>
-              <form className={classes.container} noValidate autoComplete="off">
+              <form
+                className={classes.container}
+                noValidate
+                autoComplete="off"
+                onSubmit={this.handleSend}
+              >
                 <TextField
                   id="full-width"
                   label="Recipient"
                   InputProps={inputProps}
                   InputLabelProps={inputLabelProps}
                   placeholder="Recipient address"
-                  helperText=""
-                  fullWidth
                   margin="normal"
+                  fullWidth
+                  helperText={this.state.accountError}
+                  error={!_isEmpty(this.state.accountError)}
+                  value={this.state.account}
+                  onChange={this.handleChange("account")}
                 />
 
                 <TextField
@@ -114,7 +108,12 @@ class Send extends Component {
                   InputProps={inputProps}
                   InputLabelProps={inputLabelProps}
                   margin="normal"
+                  helperText={this.state.amountError}
+                  error={!_isEmpty(this.state.amountError)}
+                  value={this.state.amount}
+                  onChange={this.handleChange("amount")}
                 />
+
                 <TextField
                   id="select-unit"
                   select
@@ -135,6 +134,8 @@ class Send extends Component {
                     </MenuItem>
                   ))}
                 </TextField>
+
+                {/*
                 <TextField
                   id="password"
                   label="Password"
@@ -145,6 +146,7 @@ class Send extends Component {
                   margin="normal"
                   fullWidth
                 />
+                */}
               </form>
             </CardContent>
             <CardActions>
@@ -156,6 +158,7 @@ class Send extends Component {
                   margin: "0 12px 20px 12px",
                   color: "white"
                 }}
+                onClick={this.handleSend}
               >
                 Send
               </Button>
@@ -167,4 +170,4 @@ class Send extends Component {
   }
 }
 
-export default withStyles(styles)(Send);
+export default withStyles(styles)(inject("account")(observer(Send)));
