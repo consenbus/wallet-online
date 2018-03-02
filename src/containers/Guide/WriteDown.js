@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
 import { Link } from "react-router-dom";
 import Layout from "./_Layout";
 
@@ -27,7 +28,7 @@ class WriteDown extends Component {
 
         <div style={{ marginTop: "30%" }}>
           <p className="ellipsis" style={{ color: teal["A700"] }}>
-            637C182CF33A84D142E34A0263536FD1EAD7DC3327D77D106987E39DD3A865B9
+            {this.props.account.currentAccount.seed}
           </p>
         </div>
 
@@ -58,4 +59,4 @@ class WriteDown extends Component {
   }
 }
 
-export default WriteDown;
+export default inject("account")(observer(WriteDown));
