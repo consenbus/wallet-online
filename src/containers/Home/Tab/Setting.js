@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { withStyles } from "material-ui/styles";
-import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
+import List, { ListItem, ListItemText } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Card from "material-ui/Card";
 import RightIcon from "material-ui-icons/KeyboardArrowRight";
@@ -20,7 +21,7 @@ class Setting extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     return (
       <Layout active="setting">
         <Header title="Settings" />
@@ -31,7 +32,7 @@ class Setting extends Component {
                 <ListItemText primary="Language" />
                 <RightIcon />
               </ListItem>
-              <ListItem button>
+              <ListItem button component={Link} to="/guide">
                 <ListItemText primary="Help & Support" />
                 <RightIcon />
               </ListItem>
