@@ -10,6 +10,8 @@ import TabSetting from "./Home/Tab/Setting";
 
 // account
 import AccountShow from "./Home/Account/Show";
+import AccountNew from "./Home/Account/New";
+import AccountRestore from "./Home/Account/Restore";
 
 // other
 import Example from "./Home/Example";
@@ -28,7 +30,9 @@ class Home extends Component {
           <Route path="/tab/setting" component={TabSetting} />
 
           {/* account */}
-          <Route path="/accounts/:address" component={AccountShow} />
+          <Route path="/account/new" component={AccountNew} />
+          <Route path="/account/restore" component={AccountRestore} />
+          <Route path="/accounts/:account" component={AccountShow} />
 
           {/* other */}
           <Route path="/example" component={Example} />
