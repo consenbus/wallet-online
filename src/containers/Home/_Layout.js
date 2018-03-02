@@ -21,8 +21,7 @@ const styles = {
     right: "auto",
     position: "fixed",
     zIndex: "101",
-    margin: "0em",
-    width: "100%"
+    margin: "0em"
   },
   tab: {
     minWidth: "60px",
@@ -42,7 +41,7 @@ class Layout extends Component {
 
   render() {
     const { classes, active } = this.props;
-    const { value } = this.state;
+    // const { value } = this.state;
 
     return (
       <div>
