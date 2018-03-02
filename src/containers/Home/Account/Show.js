@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
 import { Link } from "react-router-dom";
+import _map from "lodash/map";
+
 import { withStyles } from "material-ui/styles";
 import pink from "material-ui/colors/pink";
 import green from "material-ui/colors/green";
@@ -16,24 +19,40 @@ import RemoveCircleOutlineIcon from "material-ui-icons/RemoveCircleOutline";
 
 import Layout from "../_Layout";
 import Header from "../Tab/_Header";
+import converter from "../../../utils/converter";
 
 const styles = {
   avatar: {},
   pinkAvatar: {
     color: "#fff",
-    backgroundColor: pink[500]
+    backgroundColor: pink[500],
+    marginRight: "10px"
   },
   greenAvatar: {
     color: "#fff",
-    backgroundColor: green[500]
+    backgroundColor: green[500],
+    marginRight: "10px"
   }
 };
 
 class Show extends Component {
+  componentWillMount() {
+    const account = this.props.match.params.account;
+    this.props.account.getAccountBalance(account);
+    this.props.account.getAccountHistory(account);
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, account } = this.props;
+    const addr = this.props.match.params.account;
+    const current = account.currentAccount;
+    const history = account.currentHistory;
     const action = props => (
-      <IconButton color="inherit" component={Link} to={"/"}>
+      <IconButton
+        color="inherit"
+        component={Link}
+        to={`/accounts/${addr}/edit`}
+      >
         <EditIcon />
       </IconButton>
     );
@@ -55,37 +74,42 @@ class Show extends Component {
             paddingBottom: "50px"
           }}
         >
-          <Typography variant="display2" color="inherit">
-            28,943 BUS
+          <Typography variant="display1" color="inherit">
+            <span className="ellipsis">
+              {converter.unit(current.balance || 0, "raw", "NANO")} BUS
+            </span>
           </Typography>
           <Typography variant="subheading" color="inherit">
-            34.00 USD
+            <span className="ellipsis">{addr}</span>
           </Typography>
         </div>
 
         <List>
-          <ListItem>
-            <Avatar className={classes.greenAvatar}>
-              <AddCircleOutlineIcon />
-            </Avatar>
-            <ListItemText primary="bus_xxxxxxxx" secondary="10,003 BUS" />
-          </ListItem>
-          <ListItem>
-            <Avatar className={classes.pinkAvatar}>
-              <RemoveCircleOutlineIcon />
-            </Avatar>
-            <ListItemText primary="bus_xxxxxxxx" secondary="10,003 BUS" />
-          </ListItem>
-          <ListItem>
-            <Avatar className={classes.greenAvatar}>
-              <AddCircleOutlineIcon />
-            </Avatar>
-            <ListItemText primary="bus_xxxxxxxx" secondary="10,003 BUS" />
-          </ListItem>
+          {_map(history.history, h => (
+            <ListItem key={h.hash}>
+              {h.type === "receive" ? (
+                <Avatar className={classes.greenAvatar}>
+                  <AddCircleOutlineIcon />
+                </Avatar>
+              ) : (
+                <Avatar className={classes.pinkAvatar}>
+                  <RemoveCircleOutlineIcon />
+                </Avatar>
+              )}
+              <span style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                <ListItemText
+                  primary={h.account}
+                  secondary={
+                    converter.unit(h.amount || 0, "raw", "NANO") + " BUS"
+                  }
+                />
+              </span>
+            </ListItem>
+          ))}
         </List>
       </Layout>
     );
   }
 }
 
-export default withStyles(styles)(Show);
+export default withStyles(styles)(inject("account")(observer(Show)));
