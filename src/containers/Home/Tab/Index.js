@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { observer, inject } from "mobx-react";
 
 import List, { ListItem, ListItemText } from "material-ui/List";
-import Card, { CardHeader, CardContent } from "material-ui/Card";
+import Card, { CardHeader } from "material-ui/Card";
 import IconButton from "material-ui/IconButton";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
@@ -11,12 +12,15 @@ import WalletIcon from "material-ui-icons/AccountBalanceWallet";
 
 import Layout from "../_Layout";
 import Header from "./_Header";
+import _map from "lodash/map";
 
 class Index extends Component {
   render() {
-    const { classes } = this.props;
+    const { account } = this.props;
+    const accounts = account.accounts;
+
     const action = (
-      <IconButton>
+      <IconButton component={Link} to="/account/new">
         <AddIcon />
       </IconButton>
     );
@@ -30,30 +34,33 @@ class Index extends Component {
             <CardHeader
               action={action}
               title="My account"
-              subheader="Total 2 account"
+              subheader={`Total ${accounts.length || 0} account`}
             />
             <Divider />
 
             <List>
-              <ListItem component={Link} to="/accounts/a">
-                <Avatar>
-                  <WalletIcon />
-                </Avatar>
-                <ListItemText primary="Default account" secondary="199 BUS" />
-              </ListItem>
-              <ListItem component={Link} to="/accounts/b">
-                <Avatar>
-                  <WalletIcon />
-                </Avatar>
-                <ListItemText primary="Work wallet" secondary="0.12 BUS" />
-              </ListItem>
+              {_map(accounts, a => (
+                <ListItem
+                  key={a.account}
+                  component={Link}
+                  to={`/accounts/${a.account || "null"}`}
+                >
+                  <Avatar>
+                    <WalletIcon />
+                  </Avatar>
+                  <ListItemText
+                    style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+                    primary={a.name || "Default account"}
+                    secondary={a.account}
+                  />
+                </ListItem>
+              ))}
             </List>
           </Card>
-          <Link to="/guide">Guide</Link>
         </div>
       </Layout>
     );
   }
 }
 
-export default Index;
+export default inject("account")(observer(Index));
