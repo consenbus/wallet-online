@@ -8,6 +8,4 @@ const rpc = axios.create({
 const res = await rpc.post('/', {action: 'block_count'})
 console.log(res.data) // Output: {count: "5648377", unchecked: "2906"}
 */
-export function request(params) {
-  return rpc.post("/", params);
-}
+export default rpc;
