@@ -27,6 +27,7 @@ class BackupWarning extends Component {
 
         <div style={{ marginTop: "20%" }}>
           <img
+            alt="warning"
             src={backupWarningImage}
             style={{
               marginTop: "5rem",
