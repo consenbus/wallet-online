@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { observer, inject } from "mobx-react";
+import _isEmpty from "lodash/isEmpty";
 
 import { withStyles } from "material-ui/styles";
 import IconButton from "material-ui/IconButton";
@@ -47,15 +48,41 @@ const styles = theme => ({
 });
 
 class Create extends Component {
-  state = { success: false };
+  state = {
+    success: false,
+    name: "Default account",
+    nameError: "",
+    password: "",
+    passwordError: ""
+  };
 
-  handleCreateAccount() {
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+      [name + "Error"]: ""
+    });
+  };
+
+  handleCreateAccount = e => {
+    e.preventDefault();
+    if (this.state.name === "") {
+      this.setState({ nameError: "Name must not be blank." });
+      return;
+    }
+
+    /*
+    if (this.state.password === "") {
+      this.setState({ passwordError: "Password must not be blank." });
+      return;
+    }
+    */
+
     this.props.account
-      .createAccount("Default account", "I'm_a_Password")
+      .createAccount(this.state.name /*, this.state.password*/)
       .then(() => {
         this.setState({ success: true });
       });
-  }
+  };
 
   render() {
     if (this.state.success) {
@@ -63,6 +90,7 @@ class Create extends Component {
     }
 
     const { classes } = this.props;
+
     const inputProps = {
       disableUnderline: true,
       classes: {
@@ -70,6 +98,7 @@ class Create extends Component {
         input: classes.textFieldInput
       }
     };
+
     const inputLabelProps = {
       shrink: true,
       className: classes.textFieldFormLabel
@@ -84,29 +113,42 @@ class Create extends Component {
         </p>
 
         <h2>Create account</h2>
-        <form className={classes.container} noValidate autoComplete="off">
+        <form
+          className={classes.container}
+          noValidate
+          autoComplete="off"
+          onSubmit={this.handleCreateAccount}
+        >
           <TextField
             id="full-width"
             label="Account name"
             InputProps={inputProps}
             InputLabelProps={inputLabelProps}
             placeholder=""
-            helperText=""
+            helperText={this.state.nameError}
             fullWidth
+            value={this.state.name}
             margin="normal"
+            error={!_isEmpty(this.state.nameError)}
+            onChange={this.handleChange("name")}
           />
 
+          {/*
           <TextField
             id="password"
             label="Password"
             placeholder=""
+            helperText={this.state.passwordError}
             type="password"
             InputProps={inputProps}
             InputLabelProps={inputLabelProps}
             autoComplete="current-password"
             margin="normal"
             fullWidth
+            error={!_isEmpty(this.state.passwordError)}
+            onChange={this.handleChange("password")}
           />
+          */}
         </form>
 
         <div style={{ marginTop: "1rem" }}>
@@ -119,7 +161,7 @@ class Create extends Component {
               color: "white",
               backgroundColor: teal["A700"]
             }}
-            onClick={this.handleCreateAccount.bind(this)}
+            onClick={this.handleCreateAccount}
           >
             Create new account
           </Button>
@@ -129,4 +171,4 @@ class Create extends Component {
   }
 }
 
-export default inject("account")(observer(withStyles(styles)(Create)));
+export default withStyles(styles)(inject("account")(observer(Create)));
