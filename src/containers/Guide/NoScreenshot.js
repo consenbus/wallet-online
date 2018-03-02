@@ -5,7 +5,7 @@ import Layout from "./_Layout";
 
 import IconButton from "material-ui/IconButton";
 import ButtonBase from "material-ui/ButtonBase";
-import red from "material-ui/colors/red";
+// import red from "material-ui/colors/red";
 import LeftIcon from "material-ui-icons/KeyboardArrowLeft";
 
 class NoScreenshot extends Component {
@@ -30,6 +30,7 @@ class NoScreenshot extends Component {
 
         <div style={{ marginTop: "30%" }}>
           <img
+            alt=""
             src={noScreenshotImage}
             style={{
               marginTop: "5rem",
