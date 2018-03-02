@@ -1,5 +1,5 @@
 import { extendObservable } from "mobx";
-import { request } from "../utils/rpc";
+import rpc from "../utils/rpc";
 
 class Block {
   constructor() {
@@ -9,7 +9,7 @@ class Block {
   }
 
   loadBlockCount() {
-    request({ action: "block_count" }).then(res => {
+    rpc.post("/", { action: "block_count" }).then(res => {
       this.blockCount = res.data.count;
     });
   }
