@@ -7,8 +7,9 @@ import { withStyles } from "material-ui/styles";
 import IconButton from "material-ui/IconButton";
 import Button from "material-ui/Button";
 import teal from "material-ui/colors/teal";
+import grey from "material-ui/colors/grey";
 import Checkbox from "material-ui/Checkbox";
-import Modal from "material-ui/Modal";
+// import Modal from "material-ui/Modal";
 import Dialog from "material-ui/Dialog";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
@@ -116,7 +117,7 @@ class Done extends Component {
             to="/"
             style={{
               color: "white",
-              backgroundColor: enabled ? teal["A700"] : teal["900"]
+              backgroundColor: enabled ? teal["A700"] : grey["700"]
             }}
           >
             Confirm & Finish
