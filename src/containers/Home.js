@@ -14,7 +14,7 @@ import AccountNew from "./Home/Account/New";
 import AccountRestore from "./Home/Account/Restore";
 
 // other
-import Example from "./Home/Example";
+// import Example from "./Home/Example";
 import NotFound from "../components/NotFound";
 
 class Home extends Component {
@@ -35,7 +35,9 @@ class Home extends Component {
           <Route path="/accounts/:account" component={AccountShow} />
 
           {/* other */}
+          {/*
           <Route path="/example" component={Example} />
+          */}
           <Route component={NotFound} />
         </Switch>
       </main>
