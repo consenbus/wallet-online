@@ -5,6 +5,7 @@ import { createBrowserHistory } from "history";
 import { Provider } from "mobx-react";
 import registerServiceWorker from "./utils/registerServiceWorker";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
+import Reboot from "material-ui/Reboot";
 import blue from "material-ui/colors/blue";
 import grey from "material-ui/colors/grey";
 import models from "./models";
@@ -32,6 +33,7 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <Provider {...models}>
     <MuiThemeProvider theme={theme}>
+      <Reboot />
       <Router history={history}>
         <Switch>
           <Route path="/guide" component={Guide} />
