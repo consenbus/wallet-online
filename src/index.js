@@ -27,6 +27,11 @@ const theme = createMuiTheme({
       main: blue["A700"]
     },
     secondary: grey
+  },
+  typography: {
+    button: {
+      textTransform: "none"
+    }
   }
 });
 
