@@ -70,18 +70,9 @@ class Create extends Component {
       return;
     }
 
-    /*
-    if (this.state.password === "") {
-      this.setState({ passwordError: "Password must not be blank." });
-      return;
-    }
-    */
-
-    this.props.account
-      .createAccount(this.state.name /*, this.state.password*/)
-      .then(() => {
-        this.setState({ success: true });
-      });
+    this.props.account.createAccount(this.state.name).then(() => {
+      this.setState({ success: true });
+    });
   };
 
   render() {
@@ -132,23 +123,6 @@ class Create extends Component {
             error={!_isEmpty(this.state.nameError)}
             onChange={this.handleChange("name")}
           />
-
-          {/*
-          <TextField
-            id="password"
-            label="Password"
-            placeholder=""
-            helperText={this.state.passwordError}
-            type="password"
-            InputProps={inputProps}
-            InputLabelProps={inputLabelProps}
-            autoComplete="current-password"
-            margin="normal"
-            fullWidth
-            error={!_isEmpty(this.state.passwordError)}
-            onChange={this.handleChange("password")}
-          />
-          */}
         </form>
 
         <div style={{ marginTop: "1rem" }}>
