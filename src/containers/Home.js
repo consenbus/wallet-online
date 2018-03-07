@@ -12,6 +12,7 @@ import TabSetting from "./Home/Tab/Setting";
 import AccountShow from "./Home/Account/Show";
 import AccountNew from "./Home/Account/New";
 import AccountRestore from "./Home/Account/Restore";
+import AccountEdit from "./Home/Account/Edit";
 
 // other
 // import Example from "./Home/Example";
@@ -32,7 +33,8 @@ class Home extends Component {
           {/* account */}
           <Route path="/account/new" component={AccountNew} />
           <Route path="/account/restore" component={AccountRestore} />
-          <Route path="/accounts/:account" component={AccountShow} />
+          <Route exact path="/accounts/:account" component={AccountShow} />
+          <Route path="/accounts/:account/edit" component={AccountEdit} />
 
           {/* other */}
           {/*
