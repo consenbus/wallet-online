@@ -38,6 +38,7 @@ const styles = {
 class Show extends Component {
   componentWillMount() {
     const account = this.props.match.params.account;
+    this.props.account.changeCurrentAccount(account);
     this.props.account.getAccountBalance(account);
     this.props.account.getAccountHistory(account);
   }
@@ -51,7 +52,7 @@ class Show extends Component {
       <IconButton
         color="inherit"
         component={Link}
-        to={`/accounts/${addr}/edit`}
+        to={"/accounts/" + addr + "/edit"}
       >
         <EditIcon />
       </IconButton>
@@ -60,7 +61,7 @@ class Show extends Component {
     return (
       <Layout active="">
         <Header
-          title="Default account"
+          title={current.name || "null"}
           link="/"
           icon={LeftIcon}
           action={action}
