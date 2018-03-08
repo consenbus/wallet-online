@@ -33,16 +33,15 @@ class New extends Component {
       return;
     }
 
-    this.props.account
-      .createAccount(this.state.name /*, this.state.password*/)
-      .then(() => {
-        this.setState({ success: true });
-      });
+    this.props.account.createAccount(this.state.name).then(() => {
+      this.setState({ success: true });
+    });
   };
 
   render() {
+    const current = this.props.account.currentAccount;
     if (this.state.success) {
-      return <Redirect to="/" />;
+      return <Redirect to={"/accounts/" + current.account} />;
     }
 
     const { classes } = this.props;
