@@ -5,7 +5,9 @@ import { CircularProgress } from "material-ui/Progress";
 
 class CheckAccount extends Component {
   componentWillMount() {
-    this.props.account.loadAccounts();
+    this.props.account.loadAccounts().then(() => {
+      this.props.account.checkReadyBlocks();
+    });
   }
 
   render() {
