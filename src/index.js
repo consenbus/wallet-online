@@ -1,38 +1,38 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Router, Route, Switch } from "react-router-dom";
-import { createBrowserHistory } from "history";
-import { Provider } from "mobx-react";
-import registerServiceWorker from "./utils/registerServiceWorker";
-import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
-import Reboot from "material-ui/Reboot";
-import blue from "material-ui/colors/blue";
-import grey from "material-ui/colors/grey";
-import models from "./models";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Provider } from 'mobx-react';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import Reboot from 'material-ui/Reboot';
+import blue from 'material-ui/colors/blue';
+import grey from 'material-ui/colors/grey';
+import 'typeface-roboto';
+import models from './models';
+import registerServiceWorker from './utils/registerServiceWorker';
 
 // Styles
 // import "semantic-ui-css/semantic.css";
-import "./assets/css/index.css";
-import "typeface-roboto";
+import './assets/css/index.css';
 
 // Modules
-import CheckAccountRoute from "./containers/Home/_CheckAccount";
-import Home from "./containers/Home";
-import Guide from "./containers/Guide";
+import CheckAccountRoute from './containers/Home/_CheckAccount';
+import Home from './containers/Home';
+import Guide from './containers/Guide';
 
 const history = createBrowserHistory();
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: blue["A700"]
+      main: blue.A700,
     },
-    secondary: grey
+    secondary: grey,
   },
   typography: {
     button: {
-      textTransform: "none"
-    }
-  }
+      textTransform: 'none',
+    },
+  },
 });
 
 ReactDOM.render(
@@ -47,7 +47,7 @@ ReactDOM.render(
       </Router>
     </MuiThemeProvider>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 registerServiceWorker();
