@@ -20,6 +20,7 @@ class Guide extends Component {
         <Switch>
           {/* guide */}
           <Route path="/guide" exact component={Index} />
+          {/* TODO <Route path="/guide/restore" component={Retore} />*/}
           <Route path="/guide/create" component={Create} />
           <Route path="/guide/backup" component={Backup} />
           <Route path="/guide/backup-warning" component={BackupWarning} />
