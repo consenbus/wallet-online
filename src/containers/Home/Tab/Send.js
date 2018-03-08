@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { observer, inject } from "mobx-react";
+import _map from "lodash/map";
 import { withStyles } from "material-ui/styles";
 import TextField from "material-ui/TextField";
-import MenuItem from "material-ui/Menu/MenuItem";
+// import MenuItem from "material-ui/Menu/MenuItem";
+import Menu, { MenuItem } from "material-ui/Menu";
+import DownIcon from "material-ui-icons/KeyboardArrowDown";
 import Card, { CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import Layout from "../_Layout";
@@ -28,16 +31,31 @@ class Send extends Component {
     amount: "",
     amountError: "",
     unit: "BUS",
-    unitErro: ""
+    unitErro: "",
+    anchorEl: null
   };
 
-  handleChange = name => event => {
+  handleChangeForm = name => event => {
     this.setState({
       [name]: event.target.value,
       [name + "Error"]: ""
     });
   };
 
+  handleClickMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleCloseMenu = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  handleChangeMenu = account => () => {
+    this.props.account.changeCurrentAccount(account);
+    this.setState({ anchorEl: null });
+  };
+
+  // TODO
   handleSend = e => {
     e.preventDefault();
     if (this.state.account === "") {
@@ -50,8 +68,10 @@ class Send extends Component {
       return;
     }
 
+    const account = this.props.account.currentAccount;
+    const toAccountAddress = this.state.account;
     this.props.account
-      .sendAccountBlocks(this.state.account, this.state.amount)
+      .send(account, this.state.amount, toAccountAddress)
       .then(() => {
         this.setState({ success: true });
       });
@@ -59,6 +79,7 @@ class Send extends Component {
 
   render() {
     const { classes } = this.props;
+    const account = this.props.account.currentAccount;
     const inputProps = {
       disableUnderline: true,
       classes: {
@@ -74,6 +95,34 @@ class Send extends Component {
     return (
       <Layout active="send">
         <Header title="Send" />
+
+        {/* account selector */}
+        <div style={{ textAlign: "center", marginTop: "30px" }}>
+          <Button
+            aria-owns={this.state.anchorEl ? "simple-menu" : null}
+            aria-haspopup="true"
+            onClick={this.handleClickMenu}
+          >
+            {account.name} <DownIcon />
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={this.state.anchorEl}
+            open={Boolean(this.state.anchorEl)}
+            onClose={this.handleCloseMenu}
+          >
+            {_map(this.props.account.accounts, a => {
+              return (
+                <MenuItem
+                  key={a.account}
+                  onClick={this.handleChangeMenu(a.account)}
+                >
+                  {a.name || "null"}
+                </MenuItem>
+              );
+            })}
+          </Menu>
+        </div>
 
         <div style={{ padding: 20 }}>
           <Card>
@@ -95,14 +144,12 @@ class Send extends Component {
                   helperText={this.state.accountError}
                   error={!_isEmpty(this.state.accountError)}
                   value={this.state.account}
-                  onChange={this.handleChange("account")}
+                  onChange={this.handleChangeForm("account")}
                 />
 
                 <TextField
                   id="number"
                   label="Amount"
-                  value={this.state.amount}
-                  onChange={this.handleChange("amount")}
                   type="number"
                   className={classes.textField}
                   InputProps={inputProps}
@@ -111,7 +158,7 @@ class Send extends Component {
                   helperText={this.state.amountError}
                   error={!_isEmpty(this.state.amountError)}
                   value={this.state.amount}
-                  onChange={this.handleChange("amount")}
+                  onChange={this.handleChangeForm("amount")}
                 />
 
                 <TextField
@@ -119,7 +166,7 @@ class Send extends Component {
                   select
                   label="Unit"
                   value={this.state.unit}
-                  onChange={this.handleChange("unit")}
+                  onChange={this.handleChangeForm("unit")}
                   helperText=""
                   margin="normal"
                   InputProps={{
