@@ -1,79 +1,79 @@
-import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
-import { observer, inject } from "mobx-react";
-import _isEmpty from "lodash/isEmpty";
+import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { observer, inject } from 'mobx-react';
+import _isEmpty from 'lodash/isEmpty';
 
-import { withStyles } from "material-ui/styles";
-import IconButton from "material-ui/IconButton";
-import TextField from "material-ui/TextField";
-import Button from "material-ui/Button";
-import teal from "material-ui/colors/teal";
-import LeftIcon from "material-ui-icons/KeyboardArrowLeft";
+import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+import teal from 'material-ui/colors/teal';
+import LeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 
-import Layout from "./_Layout";
+import Layout from './_Layout';
 
 const styles = theme => ({
   container: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   textField: {
-    //marginLeft: theme.spacing.unit,
-    //marginRight: theme.spacing.unit,
-    //width: 200
+    // marginLeft: theme.spacing.unit,
+    // marginRight: theme.spacing.unit,
+    // width: 200
   },
   menu: {
-    width: 200
+    width: 200,
   },
   textFieldRoot: {
     padding: 0,
-    "label + &": {
-      marginTop: theme.spacing.unit * 3
-    }
+    'label + &': {
+      marginTop: theme.spacing.unit * 3,
+    },
   },
   textFieldInput: {
     backgroundColor: theme.palette.common.white,
-    border: "1px solid #ced4da",
-    padding: "10px 5px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    "&:focus": {
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
-    }
+    border: '1px solid #ced4da',
+    padding: '10px 5px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    '&:focus': {
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
   },
   textFieldFormLabel: {
     color: theme.palette.common.white,
-    fontSize: 18
-  }
+    fontSize: 18,
+  },
 });
 
 class Restore extends Component {
   state = {
     success: false,
-    name: "",
-    nameError: "",
-    seed: "",
-    seedError: "",
-    password: "",
-    passwordError: ""
+    name: '',
+    nameError: '',
+    seed: '',
+    seedError: '',
+    // password: '',
+    // passwordError: '',
   };
 
-  handleChange = name => event => {
+  handleChange = name => (event) => {
     this.setState({
       [name]: event.target.value,
-      [name + "Error"]: ""
+      [`${name}Error`]: '',
     });
   };
 
-  handleCreateAccount = e => {
+  handleCreateAccount = (e) => {
     e.preventDefault();
-    if (this.state.name === "") {
-      this.setState({ nameError: "Name must not be blank." });
+    if (this.state.name === '') {
+      this.setState({ nameError: 'Name must not be blank.' });
       return;
     }
 
-    if (this.state.seed === "") {
-      this.setState({ seedError: "Seed must not be blank." });
+    if (this.state.seed === '') {
+      this.setState({ seedError: 'Seed must not be blank.' });
       return;
     }
 
@@ -102,19 +102,19 @@ class Restore extends Component {
       disableUnderline: true,
       classes: {
         root: classes.textFieldRoot,
-        input: classes.textFieldInput
-      }
+        input: classes.textFieldInput,
+      },
     };
 
     const inputLabelProps = {
       shrink: true,
-      className: classes.textFieldFormLabel
+      className: classes.textFieldFormLabel,
     };
 
     return (
       <Layout>
-        <p style={{ textAlign: "left" }}>
-          <IconButton color="inherit" component={Link} to={"/guide"}>
+        <p style={{ textAlign: 'left' }}>
+          <IconButton color="inherit" component={Link} to="/guide">
             <LeftIcon />
           </IconButton>
         </p>
@@ -136,7 +136,7 @@ class Restore extends Component {
             margin="normal"
             helperText={this.state.nameError}
             error={!_isEmpty(this.state.nameError)}
-            onChange={this.handleChange("name")}
+            onChange={this.handleChange('name')}
             value={this.state.name}
           />
 
@@ -149,7 +149,7 @@ class Restore extends Component {
             margin="normal"
             helperText={this.state.seedError}
             error={!_isEmpty(this.state.seedError)}
-            onChange={this.handleChange("seed")}
+            onChange={this.handleChange('seed')}
             value={this.state.seed}
           />
 
@@ -171,19 +171,19 @@ class Restore extends Component {
           */}
         </form>
 
-        <div style={{ marginTop: "1rem" }}>
+        <div style={{ marginTop: '1rem' }}>
           <Button
             variant="raised"
             color="secondary"
             size="large"
             fullWidth
             style={{
-              color: "white",
-              backgroundColor: teal["A700"]
+              color: 'white',
+              backgroundColor: teal.A700,
             }}
             onClick={this.handleCreateAccount}
           >
-            Create new account
+            Restore the account
           </Button>
         </div>
       </Layout>
@@ -191,4 +191,4 @@ class Restore extends Component {
   }
 }
 
-export default withStyles(styles)(inject("account")(observer(Restore)));
+export default withStyles(styles)(inject('account')(observer(Restore)));

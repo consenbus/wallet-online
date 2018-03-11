@@ -1,17 +1,18 @@
-import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
 
 // guide
-import Index from "./Guide/Index";
-import Create from "./Guide/Create";
-import Backup from "./Guide/Backup";
-import BackupWarning from "./Guide/BackupWarning";
-import NoScreenshot from "./Guide/NoScreenshot";
-import WriteDown from "./Guide/WriteDown";
-import Done from "./Guide/Done";
+import Index from './Guide/Index';
+import Create from './Guide/Create';
+import Backup from './Guide/Backup';
+import BackupWarning from './Guide/BackupWarning';
+import NoScreenshot from './Guide/NoScreenshot';
+import WriteDown from './Guide/WriteDown';
+import Done from './Guide/Done';
+import Restore from './Guide/Restore';
 
 // other
-import NotFound from "../components/NotFound";
+import NotFound from '../components/NotFound';
 
 class Guide extends Component {
   render() {
@@ -20,7 +21,7 @@ class Guide extends Component {
         <Switch>
           {/* guide */}
           <Route path="/guide" exact component={Index} />
-          {/* TODO <Route path="/guide/restore" component={Retore} />*/}
+          <Route path="/guide/restore" component={Restore} />
           <Route path="/guide/create" component={Create} />
           <Route path="/guide/backup" component={Backup} />
           <Route path="/guide/backup-warning" component={BackupWarning} />
