@@ -1,48 +1,46 @@
-import React, { Component } from "react";
-import { observer, inject } from "mobx-react";
-import _map from "lodash/map";
-import { withStyles } from "material-ui/styles";
-import TextField from "material-ui/TextField";
+import React, { Component } from 'react';
+import { observer, inject } from 'mobx-react';
+import _map from 'lodash/map';
+import _isEmpty from 'lodash/isEmpty';
+import { withStyles } from 'material-ui/styles';
+import TextField from 'material-ui/TextField';
 // import MenuItem from "material-ui/Menu/MenuItem";
-import Menu, { MenuItem } from "material-ui/Menu";
-import DownIcon from "material-ui-icons/KeyboardArrowDown";
-import Card, { CardActions, CardContent } from "material-ui/Card";
-import Button from "material-ui/Button";
-import Layout from "../_Layout";
-import Header from "./_Header";
-import styles from "../../../styles/form";
-import _isEmpty from "lodash/isEmpty";
+import Menu, { MenuItem } from 'material-ui/Menu';
+import DownIcon from 'material-ui-icons/KeyboardArrowDown';
+import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import Layout from '../_Layout';
+import Header from './_Header';
+import styles from '../../../styles/form';
 
 const units = [
-  { label: "GBUS", value: "GBUS" },
-  { label: "MBUS", value: "MBUS" },
-  { label: "kBUS", value: "kBUS" },
-  { label: "BUS", value: "BUS" },
-  { label: "mBUS", value: "mBUS" },
-  { label: "uBUS", value: "uBUS" },
-  { label: "nBUS", value: "nBUS" }
+  { label: 'GBUS', value: 'GBUS' },
+  { label: 'MBUS', value: 'MBUS' },
+  { label: 'kBUS', value: 'kBUS' },
+  { label: 'BUS', value: 'BUS' },
+  { label: 'mBUS', value: 'mBUS' },
+  { label: 'uBUS', value: 'uBUS' },
+  { label: 'nBUS', value: 'nBUS' },
 ];
 
 class Send extends Component {
   state = {
-    success: false,
-    account: "",
-    accountError: "",
-    amount: "",
-    amountError: "",
-    unit: "BUS",
-    unitErro: "",
-    anchorEl: null
+    account: '',
+    accountError: '',
+    amount: '',
+    amountError: '',
+    unit: 'BUS',
+    anchorEl: null,
   };
 
-  handleChangeForm = name => event => {
+  handleChangeForm = name => (event) => {
     this.setState({
       [name]: event.target.value,
-      [name + "Error"]: ""
+      [`${name}Error`]: '',
     });
   };
 
-  handleClickMenu = event => {
+  handleClickMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -55,26 +53,23 @@ class Send extends Component {
     this.setState({ anchorEl: null });
   };
 
-  // TODO
-  handleSend = e => {
+  handleSend = (e) => {
     e.preventDefault();
-    if (this.state.account === "") {
-      this.setState({ accountError: "Recipient address must not be blank." });
+    if (this.state.account === '') {
+      this.setState({ accountError: 'Recipient address must not be blank.' });
       return;
     }
 
-    if (this.state.amount === "") {
-      this.setState({ amountError: "Amount must not be blank." });
+    if (this.state.amount === '') {
+      this.setState({ amountError: 'Amount must not be blank.' });
       return;
     }
 
-    const account = this.props.account.currentAccount;
-    const toAccountAddress = this.state.account;
+    const {
+      amount, unit, account: toAccountAddress,
+    } = this.state;
     this.props.account
-      .send(account, this.state.amount, toAccountAddress)
-      .then(() => {
-        this.setState({ success: true });
-      });
+      .send(amount, unit, toAccountAddress);
   };
 
   render() {
@@ -84,12 +79,12 @@ class Send extends Component {
       disableUnderline: true,
       classes: {
         root: classes.textFieldRoot,
-        input: classes.textFieldInput
-      }
+        input: classes.textFieldInput,
+      },
     };
     const inputLabelProps = {
       shrink: true,
-      className: classes.textFieldFormLabel
+      className: classes.textFieldFormLabel,
     };
 
     return (
@@ -97,9 +92,9 @@ class Send extends Component {
         <Header title="Send" />
 
         {/* account selector */}
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
+        <div style={{ textAlign: 'center', marginTop: '30px' }}>
           <Button
-            aria-owns={this.state.anchorEl ? "simple-menu" : null}
+            aria-owns={this.state.anchorEl ? 'simple-menu' : null}
             aria-haspopup="true"
             onClick={this.handleClickMenu}
           >
@@ -111,16 +106,14 @@ class Send extends Component {
             open={Boolean(this.state.anchorEl)}
             onClose={this.handleCloseMenu}
           >
-            {_map(this.props.account.accounts, a => {
-              return (
-                <MenuItem
-                  key={a.account}
-                  onClick={this.handleChangeMenu(a.account)}
-                >
-                  {a.name || "null"}
-                </MenuItem>
-              );
-            })}
+            {_map(this.props.account.accounts, a => (
+              <MenuItem
+                key={a.account}
+                onClick={this.handleChangeMenu(a.account)}
+              >
+                {a.name || 'null'}
+              </MenuItem>
+            ))}
           </Menu>
         </div>
 
@@ -144,7 +137,7 @@ class Send extends Component {
                   helperText={this.state.accountError}
                   error={!_isEmpty(this.state.accountError)}
                   value={this.state.account}
-                  onChange={this.handleChangeForm("account")}
+                  onChange={this.handleChangeForm('account')}
                 />
 
                 <TextField
@@ -158,7 +151,7 @@ class Send extends Component {
                   helperText={this.state.amountError}
                   error={!_isEmpty(this.state.amountError)}
                   value={this.state.amount}
-                  onChange={this.handleChangeForm("amount")}
+                  onChange={this.handleChangeForm('amount')}
                 />
 
                 <TextField
@@ -166,12 +159,12 @@ class Send extends Component {
                   select
                   label="Unit"
                   value={this.state.unit}
-                  onChange={this.handleChangeForm("unit")}
+                  onChange={this.handleChangeForm('unit')}
                   helperText=""
                   margin="normal"
                   InputProps={{
                     disableUnderline: true,
-                    className: classes.textFieldUnit
+                    className: classes.textFieldUnit,
                   }}
                   InputLabelProps={inputLabelProps}
                 >
@@ -202,8 +195,8 @@ class Send extends Component {
                 color="secondary"
                 fullWidth
                 style={{
-                  margin: "0 12px 20px 12px",
-                  color: "white"
+                  margin: '0 12px 20px 12px',
+                  color: 'white',
                 }}
                 onClick={this.handleSend}
               >
@@ -217,4 +210,4 @@ class Send extends Component {
   }
 }
 
-export default withStyles(styles)(inject("account")(observer(Send)));
+export default withStyles(styles)(inject('account')(observer(Send)));
