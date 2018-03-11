@@ -129,6 +129,8 @@ class Account {
       count: 1,
     });
 
+    if (!data.blocks) return false;
+
     const blocks = data.blocks[address];
 
     if (Array.isArray(blocks) && blocks.length > 0) return blocks[0];
