@@ -18,6 +18,8 @@
     "mocha": true
   },
   "rules": {
+    "react/prop-types": "off",
+    "react/prefer-stateless-function": "off",
     "react/require-extension": "off",
     "prefer-destructuring": "off",
     "import/extensions": "off",
