@@ -1,5 +1,4 @@
 import { extendObservable } from 'mobx';
-import { BigNumber } from 'bignumber.js';
 import _isEmpty from 'lodash/isEmpty';
 import _merge from 'lodash/merge';
 import _find from 'lodash/find';
@@ -7,16 +6,7 @@ import _map from 'lodash/map';
 import _filter from 'lodash/filter';
 import rpc from '../utils/rpc';
 import store from '../utils/store';
-
-const units = {
-  GBUS: BigNumber('1e36'),
-  MBUS: BigNumber('1e33'),
-  kBUS: BigNumber('1e30'),
-  BUS: BigNumber('1e27'),
-  mBUS: BigNumber('1e24'),
-  uBUS: BigNumber('1e21'),
-  nBUS: BigNumber('1e18'),
-};
+import converter from '../utils/converter';
 
 class Account {
   constructor() {
@@ -64,17 +54,11 @@ class Account {
     return storeResult;
   }
 
-  static amountConvert(amount, unit) {
-    const times = units[unit];
-    if (!times) throw Error(`Non-exists unit: ${unit}`);
-    return times.multipliedBy(amount).toString(10);
-  }
-
   async send(amount, unit, toAccountAddress) {
     const account = this.currentAccount;
 
     // Step 1. Convert amount to raw 128-bit stringified integer. Since converion
-    const rawAmount = Account.amountConvert(amount, unit);
+    const rawAmount = converter.unit(amount, unit, 'raw');
 
     // Step 2. Retrieve your account info to get your latest block hash (frontier)
     // and balance
