@@ -1,38 +1,38 @@
-import React, { Component } from "react";
-import { observer, inject } from "mobx-react";
-import { Link } from "react-router-dom";
-import _map from "lodash/map";
+import React, { Component } from 'react';
+import { observer, inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import _map from 'lodash/map';
 
-import { withStyles } from "material-ui/styles";
-import pink from "material-ui/colors/pink";
-import green from "material-ui/colors/green";
-import blue from "material-ui/colors/blue";
+import { withStyles } from 'material-ui/styles';
+import pink from 'material-ui/colors/pink';
+import green from 'material-ui/colors/green';
+import blue from 'material-ui/colors/blue';
 
-import Typography from "material-ui/Typography";
-import IconButton from "material-ui/IconButton";
-import List, { ListItem, ListItemText } from "material-ui/List";
-import Avatar from "material-ui/Avatar";
-import EditIcon from "material-ui-icons/Edit";
-import LeftIcon from "material-ui-icons/KeyboardArrowLeft";
-import AddCircleOutlineIcon from "material-ui-icons/AddCircleOutline";
-import RemoveCircleOutlineIcon from "material-ui-icons/RemoveCircleOutline";
+import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import List, { ListItem, ListItemText } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import EditIcon from 'material-ui-icons/Edit';
+import LeftIcon from 'material-ui-icons/KeyboardArrowLeft';
+import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
+import RemoveCircleOutlineIcon from 'material-ui-icons/RemoveCircleOutline';
 
-import Layout from "../_Layout";
-import Header from "../Tab/_Header";
-import converter from "../../../utils/converter";
+import Layout from '../_Layout';
+import Header from '../Tab/_Header';
+import converter from '../../../utils/converter';
 
 const styles = {
   avatar: {},
   pinkAvatar: {
-    color: "#fff",
+    color: '#fff',
     backgroundColor: pink[500],
-    marginRight: "10px"
+    marginRight: '10px',
   },
   greenAvatar: {
-    color: "#fff",
+    color: '#fff',
     backgroundColor: green[500],
-    marginRight: "10px"
-  }
+    marginRight: '10px',
+  },
 };
 
 class Show extends Component {
@@ -48,11 +48,11 @@ class Show extends Component {
     const addr = this.props.match.params.account;
     const current = account.currentAccount;
     const history = account.currentHistory;
-    const action = props => (
+    const action = () => (
       <IconButton
         color="inherit"
         component={Link}
-        to={"/accounts/" + addr + "/edit"}
+        to={`/accounts/${addr}/edit`}
       >
         <EditIcon />
       </IconButton>
@@ -61,23 +61,23 @@ class Show extends Component {
     return (
       <Layout active="">
         <Header
-          title={current.name || "null"}
+          title={current.name || 'null'}
           link="/"
           icon={LeftIcon}
           action={action}
         />
         <div
           style={{
-            backgroundColor: blue["A700"],
-            color: "white",
-            textAlign: "center",
-            paddingTop: "50px",
-            paddingBottom: "50px"
+            backgroundColor: blue.A700,
+            color: 'white',
+            textAlign: 'center',
+            paddingTop: '50px',
+            paddingBottom: '50px',
           }}
         >
           <Typography variant="display1" color="inherit">
             <span className="ellipsis">
-              {converter.unit(current.balance || 0, "raw", "NANO")} BUS
+              {converter.unit(current.balance || 0, 'raw', 'BUS')} BUS
             </span>
           </Typography>
           <Typography variant="subheading" color="inherit">
@@ -88,7 +88,7 @@ class Show extends Component {
         <List>
           {_map(history.history, h => (
             <ListItem key={h.hash}>
-              {h.type === "receive" ? (
+              {h.type === 'receive' ? (
                 <Avatar className={classes.greenAvatar}>
                   <AddCircleOutlineIcon />
                 </Avatar>
@@ -97,11 +97,11 @@ class Show extends Component {
                   <RemoveCircleOutlineIcon />
                 </Avatar>
               )}
-              <span style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+              <span style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
                 <ListItemText
                   primary={h.account}
                   secondary={
-                    converter.unit(h.amount || 0, "raw", "NANO") + " BUS"
+                    `${converter.unit(h.amount || 0, 'raw', 'BUS')} BUS`
                   }
                 />
               </span>
@@ -113,4 +113,4 @@ class Show extends Component {
   }
 }
 
-export default withStyles(styles)(inject("account")(observer(Show)));
+export default withStyles(styles)(inject('account')(observer(Show)));
