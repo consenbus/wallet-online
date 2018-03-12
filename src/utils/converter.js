@@ -1,65 +1,41 @@
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
 
-//type NanoUnit = 'raw' | 'NANO' | 'XRB' | 'mrai' | 'krai' | 'rai'
+// type BusUnit = raw | nBUS | uBUS | mBUS | BUS | kBUS | MBUS | GBUS
+const units = {
+  GBUS: BigNumber('1e36'),
+  MBUS: BigNumber('1e33'),
+  kBUS: BigNumber('1e30'),
+  BUS: BigNumber('1e27'),
+  mBUS: BigNumber('1e24'),
+  uBUS: BigNumber('1e21'),
+  nBUS: BigNumber('1e18'),
+  raw: BigNumber('1e0'),
+};
 
 const converter = {
   unit(
-    input /*: string | number*/,
-    input_unit /*: NanoUnit*/,
-    output_unit /*: NanoUnit*/
+    input, /* : string | number */
+    inUnit, /* : NanoUnit */
+    outUnit, /* : NanoUnit */
   ) {
-    let value = new BigNumber(input.toString());
+    const inTimes = units[inUnit];
+    const outTimes = units[outUnit];
+    if (!inTimes) throw Error(`Non-exists unit: ${inUnit}`);
+    if (!outTimes) throw Error(`Non-exists unit: ${outUnit}`);
+    const value = new BigNumber(input.toString());
 
-    // Step 1: to RAW
-    switch (input_unit) {
-      case "raw":
-        // value = value;
-        break;
-      case "NANO":
-      case "XRB":
-      case "mrai":
-        value = value.shiftedBy(30);
-        break;
-      case "krai":
-        value = value.shiftedBy(27);
-        break;
-      case "rai":
-        value = value.shiftedBy(24);
-        break;
-      default:
-        throw new Error(`Unkown input unit ${input_unit}`);
-    }
-
-    // Step 2: to output
-    switch (output_unit) {
-      case "raw":
-        // value = value;
-        break;
-      case "NANO":
-      case "XRB":
-      case "mrai":
-        value = value.shiftedBy(-30);
-        break;
-      case "krai":
-        value = value.shiftedBy(-27);
-        break;
-      case "rai":
-        value = value.shiftedBy(-24);
-        break;
-      default:
-        throw new Error(`Unknown output unit ${output_unit}`);
-    }
-
-    return value.toFixed(6);
+    const output = inTimes.multipliedBy(value).dividedBy(outTimes);
+    if (outUnit === 'raw') return output.toString(10);
+    return output.toFixed(6);
   },
 
-  minus(base /*: string*/, minus /*: string*/) {
+  minus(base /* : string */, minus /* : string */) {
     new BigNumber(base).minus(new BigNumber(minus)).toFixed(0);
   },
 
-  plus(base /*: string*/, plus /*: string*/) {
+  plus(base /* : string */, plus /* : string */) {
     new BigNumber(base).plus(new BigNumber(plus)).toFixed(0);
-  }
+  },
 };
 
 export default converter;
