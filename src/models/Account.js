@@ -164,7 +164,7 @@ class Account {
       work: workResult.data.work,
       previous,
       representative:
-        'xrb_1hza3f7wiiqa7ig3jczyxj5yo86yegcmqk3criaz838j91sxcckpfhbhhra1',
+        'bus_3h7qonaut7wkedquso3hakhpp79rp4bsysggtko519qm6bfrrua8dqbhge77',
     });
 
     // Step 4. Publish your open block to the network using "process"
